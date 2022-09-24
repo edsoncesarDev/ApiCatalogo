@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {}
+    "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {}
   },
   "projects": {
-    "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {
+    "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
+        "projectUniqueName": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
         "projectName": "APICatalogo",
-        "projectPath": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
+        "projectPath": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo.csproj",
         "packagesPath": "C:\\Users\\edson\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\obj\\",
+        "outputPath": "C:\\Users\\edson\\Desktop\\dev\\Projetos\\APICatalogo\\APICatalogo\\APICatalogo\\APICatalogo\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\edson\\AppData\\Roaming\\NuGet\\NuGet.Config",

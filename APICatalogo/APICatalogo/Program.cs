@@ -1,4 +1,5 @@
 using APICatalogo.Context;
+using APICatalogo.Repository_Pattern;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 // ignora o objeto quando o ciclo de referência é detectado durante a serialização - ex: Controller Categoria, Action GetCategoriasProdutos
 builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; });
+
+// adicionando IUnitOfWork como serviço, AddScoped - cada request cria um novo escopo de serviço separado
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // injetando DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>

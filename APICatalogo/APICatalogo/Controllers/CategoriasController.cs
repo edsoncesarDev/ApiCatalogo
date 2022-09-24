@@ -1,5 +1,6 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Repository_Pattern;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,19 +11,35 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uof;
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(IUnitOfWork uof)
         {
-            _context = context;
+            _uof = uof;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+
+        [HttpGet("produtos")]   //adicionando "produtos" a rota - api/[controller]/"produtos"
+        public IActionResult GetCategoriasProdutos()
         {
             try
             {
-                return Ok(await _context.Categorias.AsNoTracking().ToListAsync());
+                //include -> incluindo os produtos das categorias
+                return Ok(_uof.CategoriaRepository.GetCategoriasProdutos().ToList());
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao validar sua solicitação");
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                return Ok(_uof.CategoriaRepository.Get().ToList());
             }
             catch (Exception)
             {
@@ -32,11 +49,11 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public IActionResult GetById(int id)
         {
             try
             {
-                var Categoria = await _context.Categorias.AsNoTracking().FirstOrDefaultAsync(x => x.CategoriaId == id);
+                var Categoria = _uof.CategoriaRepository.GetById(x => x.CategoriaId == id);
 
                 if (Categoria is null)
                     return NotFound($"Categoria com id {id} não encontrada");
@@ -50,32 +67,18 @@ namespace APICatalogo.Controllers
             
         }
 
-        [HttpGet("produtos")]   //adicionando "produtos" a rota - api/[controller]/"produtos"
-        public async Task<IActionResult> GetCategoriasProdutos()
-        {
-            try
-            {
-                //include -> incluindo os produtos das categorias
-                return Ok(await _context.Categorias.Include(p => p.Produtos).ToListAsync());
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro ao validar sua solicitação");
-            }
-            
-        }
 
         [HttpPost]
-        public async Task<IActionResult> AddCategoria(Categoria categoria)
+        public IActionResult AddCategoria(Categoria categoria)
         {
             try
             {
                 if (categoria is null)
                     return BadRequest("Categoria inválida");
 
-                await _context.Categorias.AddAsync(categoria);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { id = categoria.CategoriaId });
+                _uof.CategoriaRepository.Add(categoria);
+                _uof.Commit();
+                return CreatedAtAction(nameof(GetById), new { id = categoria.CategoriaId }, categoria);
             }
             catch (Exception)
             {
@@ -85,20 +88,22 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateCategoria(int id, Categoria categoria)
+        public IActionResult UpdateCategoria(int id, Categoria categoria)
         {
             try
             {
                 if (id != categoria.CategoriaId)
                     return BadRequest($"id {id} inválido.");
 
-                var ExisteCategoria = await _context.Categorias.FirstOrDefaultAsync(x => x.CategoriaId == id);
+                var ExisteCategoria = _uof.CategoriaRepository.GetById(x => x.CategoriaId == id);
                 if (ExisteCategoria is null)
                     return NotFound($"Categoria com id {id} não encontrada");
 
                 ExisteCategoria.Nome = categoria.Nome;
                 ExisteCategoria.ImagemUrl = categoria.ImagemUrl;
-                await _context.SaveChangesAsync();
+
+                _uof.CategoriaRepository.Update(ExisteCategoria);
+                _uof.Commit();
 
                 return Ok(ExisteCategoria);
 
@@ -111,16 +116,16 @@ namespace APICatalogo.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteCategoria(int id)
+        public IActionResult DeleteCategoria(int id)
         {
             try
             {
-                var ExisteCategoria = await _context.Categorias.FirstOrDefaultAsync(x => x.CategoriaId == id);
+                var ExisteCategoria =  _uof.CategoriaRepository.GetById(x => x.CategoriaId == id);
                 if (ExisteCategoria is null)
                     return NotFound($"Categoria com id {id} não encontrada");
 
-                _context.Remove(ExisteCategoria);
-                await _context.SaveChangesAsync();
+                _uof.CategoriaRepository.Delete(ExisteCategoria);
+                _uof.Commit();
 
                 return Ok("Categoria Deletada");
             }
