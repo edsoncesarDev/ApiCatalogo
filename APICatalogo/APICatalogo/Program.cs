@@ -1,5 +1,7 @@
 using APICatalogo.Context;
+using APICatalogo.DTOs.Mappings;
 using APICatalogo.Repository_Pattern;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -17,6 +19,13 @@ builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerial
 
 // adicionando IUnitOfWork como serviço, AddScoped - cada request cria um novo escopo de serviço separado
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// injetando AutoMapper - para mapear DTOs automaticamente
+var mappingConfig = new MapperConfiguration(x => {
+    x.AddProfile(new MappingProfile());
+});
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 // injetando DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>

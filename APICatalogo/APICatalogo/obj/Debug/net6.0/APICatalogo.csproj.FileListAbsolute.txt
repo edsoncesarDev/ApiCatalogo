@@ -120,3 +120,5 @@ C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatal
 C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatalogo\obj\Debug\net6.0\APICatalogo.pdb
 C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatalogo\obj\Debug\net6.0\APICatalogo.genruntimeconfig.cache
 C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatalogo\obj\Debug\net6.0\ref\APICatalogo.dll
+C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatalogo\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\edson\Desktop\dev\Projetos\APICatalogo\APICatalogo\APICatalogo\APICatalogo\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
