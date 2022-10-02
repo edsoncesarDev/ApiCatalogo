@@ -5,6 +5,6 @@ namespace APICatalogo.Repository_Pattern
 {
     public interface IProdutoRepository : IRepository<Produto>
     {
-        IEnumerable<Produto> GetProdutosPorPreco();
+        Task<IEnumerable<Produto>> GetProdutosPorPreco();
     }
 }

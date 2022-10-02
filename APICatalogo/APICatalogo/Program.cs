@@ -2,7 +2,11 @@ using APICatalogo.Context;
 using APICatalogo.DTOs.Mappings;
 using APICatalogo.Repository_Pattern;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +31,30 @@ var mappingConfig = new MapperConfiguration(x => {
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+// adicionando serviço Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+// validando JWT Token
+// adiciona o manipulador de autenticação
+// define o esquema de autenticação usado : Bearer
+// valida o emissor, a audiencia e a chave
+// usando a chave secreta e valida a assinatura
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+options.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime =  true,
+    ValidAudience = builder.Configuration["TokenConfiguration:Audience"],
+    ValidIssuer = builder.Configuration["TokenConfiguration:Issuer"],
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+});
+
+
+
 // injetando DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
@@ -42,6 +70,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// adicionando middleware de roteamento
+app.UseRouting();
+
+// adicionando middleware de autenticação
+app.UseAuthentication();
+
+// adicionando middlewate que habilita a autorização 
 app.UseAuthorization();
 
 app.MapControllers();

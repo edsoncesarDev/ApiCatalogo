@@ -28,12 +28,13 @@ namespace APICatalogo.Repository_Pattern
             }
         }
 
-
-        public void Commit()
+        public async Task Commit()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
+        //Enquanto não fazemos o Dispose do Contexto, ele mantem a referência de todas as entidades que foram carregadas.
+        //quando mantemos o contexto aberto por muito tempo, podemos acabar trabalhando com dados que já foram modificados no banco de produção.
         public void Dispose()
         {
             _context.Dispose();

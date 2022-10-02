@@ -1,15 +1,16 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
 using APICatalogo.Repository_Pattern.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogo.Repository_Pattern
 {
     public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
         public ProdutoRepository(AppDbContext contexto) : base(contexto) { }
-        public IEnumerable<Produto> GetProdutosPorPreco()
+        public async Task<IEnumerable<Produto>> GetProdutosPorPreco()
         {
-            return Get().OrderBy(c => c.Preco).ToList();
+            return await Get().OrderBy(c => c.Preco).ToListAsync();
         }
     }
 }
