@@ -17,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// adicionando configuração de autenticação ao swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "APICatalogo", Version = "v1" });
@@ -81,7 +83,8 @@ options.TokenValidationParameters = new TokenValidationParameters
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 });
 
-
+// adicionando polícita cors
+builder.Services.AddCors();
 
 // injetando DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -106,6 +109,10 @@ app.UseAuthentication();
 
 // adicionando middlewate que habilita a autorização 
 app.UseAuthorization();
+
+// adicionando middleware cors 
+//app.UseCors(opt => opt.WithOrigins("https://www.apirequest.io").WithMethods("GET"));
+app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod());
 
 app.MapControllers();
 
