@@ -1,5 +1,6 @@
 using APICatalogo.Context;
 using APICatalogo.DTOs.Mappings;
+using APICatalogo.Logging;
 using APICatalogo.Repository_Pattern;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -85,6 +86,13 @@ options.TokenValidationParameters = new TokenValidationParameters
 
 // adicionando polícita cors
 builder.Services.AddCors();
+
+// adicionando serviço de log
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
+
 
 // injetando DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
